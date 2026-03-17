@@ -4,6 +4,41 @@ Pi extension that discovers models from OpenAI-compatible endpoints and register
 
 Instead of maintaining a static `~/.pi/agent/models.json`, you keep a small endpoint list in `~/.pi/agent/dynamic-models.json` and let the extension refresh provider/model registration automatically.
 
+## Getting started
+
+1. Install or symlink the extension into Pi.
+2. Create `~/.pi/agent/dynamic-models.json`.
+3. Add a minimal endpoint config.
+4. Run `/dynamic-models-reload` in Pi.
+
+Minimal config example:
+
+```json
+{
+  "endpoints": [
+    {
+      "name": "my-provider",
+      "baseUrl": "http://localhost:8000/v1"
+    }
+  ]
+}
+```
+
+If your endpoint requires bearer auth, the smallest useful version is:
+
+```json
+{
+  "endpoints": [
+    {
+      "name": "my-provider",
+      "baseUrl": "http://localhost:8000/v1",
+      "apiKey": "env:MY_PROVIDER_API_KEY",
+      "authHeader": true
+    }
+  ]
+}
+```
+
 ## Features
 
 - discovers models from OpenAI-compatible `GET /v1/models` endpoints
