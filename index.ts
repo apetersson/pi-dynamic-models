@@ -1193,7 +1193,8 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.registerCommand("dynamic-models-probe-context", {
-    description: "Probe the current dynamic model's effective context window",
+    description:
+      "WARNING: may keep your backend busy for 15-30 minutes; prompt cancellation is unreliable",
     handler: async (_args, ctx: ExtensionCommandContext) => {
       const model = ctx.model;
       if (!model) {

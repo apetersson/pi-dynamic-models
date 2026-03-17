@@ -59,6 +59,9 @@ If your endpoint requires bearer auth, the smallest useful version is:
   - shows all currently discovered providers and models, including known metadata
   - includes cached probed context windows when available
 - `/dynamic-models-probe-context`
+  - WARNING: do not casually try this command
+  - it has a high chance of keeping your backend very busy for 15-30 minutes
+  - prompt cancellation does not work reliably on many backends
   - probes the currently selected model if it belongs to a provider managed by this extension
   - always performs a fresh probe when explicitly invoked
   - updates the cached probe result used by status output
@@ -264,6 +267,12 @@ When an endpoint does not return enough metadata, `defaults` and `modelOverrides
 - errors from the last refresh
 
 ## Context probing
+
+### Warning
+
+Do **not** casually try `/dynamic-models-probe-context`.
+
+It has a high chance of keeping your backend very busy for 15-30 minutes, because prompt cancellation does not work reliably on many backends.
 
 `/dynamic-models-probe-context` tries to estimate the effective context window of the currently selected dynamic model.
 
