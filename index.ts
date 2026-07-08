@@ -419,6 +419,8 @@ async function buildModelDefinition(
       raw.context_window,
       raw.max_context_tokens,
       raw.maxContextTokens,
+      raw.max_model_len,              // vLLM / SGLang / TGI / LM Studio / oMLX
+      raw.maxModelLen,                // camelCase variant
       architecture?.context_length,
       architecture?.max_context_length,
       limits?.context_window,
