@@ -995,7 +995,7 @@ function formatSummary(summary: RefreshSummary): string {
     : `dynamic models: none${removed}${errors}`;
 }
 
-export default function (pi: ExtensionAPI) {
+export default async function (pi: ExtensionAPI) {
   let managedProviders = new Set<string>();
   let lastSummary: RefreshSummary = {
     configPath: getConfigPath(),
@@ -1181,7 +1181,7 @@ export default function (pi: ExtensionAPI) {
     return refreshPromise;
   };
 
-  void runRefresh({ reason: "startup" });
+  await runRefresh({ reason: "startup" });
 
   pi.on("session_start", async (_event, ctx) => {
     await runRefresh({ reason: "session_start", ctx });

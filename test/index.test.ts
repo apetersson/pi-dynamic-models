@@ -420,7 +420,7 @@ describe("pi-dynamic-models", () => {
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ data: [] })));
     const { mod } = await loadModule({ endpoints: [] });
     const pi = createPiMock();
-    mod.default(pi as any);
+    await mod.default(pi as any);
 
     const probeHandler = pi.commands.get("dynamic-models-probe-context")?.handler;
     const ctx = createCommandContext({
