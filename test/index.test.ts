@@ -155,6 +155,68 @@ describe("pi-dynamic-models", () => {
     });
   });
 
+  it("reads top-level context_length and top_provider metadata (ds4-style gateway)", async () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { mod } = await loadModule({ endpoints: [] });
+    const { buildModelDefinition } = mod.__test__;
+
+    const definition = await buildModelDefinition(
+      {
+        id: "deepseek-v4-flash",
+        name: "DeepSeek V4 Flash Vision Experimental",
+        input: ["text", "image"],
+        context_length: 256000,
+        top_provider: {
+          context_length: 256000,
+          max_completion_tokens: 4000,
+          is_moderated: false,
+        },
+      },
+      { name: "ds4-server", baseUrl: "http://127.0.0.1:18080/v1" },
+    );
+
+    expect(definition).toMatchObject({
+      id: "deepseek-v4-flash",
+      contextWindow: 256000,
+      maxTokens: 4000,
+    });
+  });
+
+  it("reads nested top_provider.context_length when top-level is absent", async () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { mod } = await loadModule({ endpoints: [] });
+    const { buildModelDefinition } = mod.__test__;
+
+    const definition = await buildModelDefinition(
+      {
+        id: "nested-model",
+        top_provider: { context_length: 131072 },
+      },
+      { name: "demo", baseUrl: "https://example.com/v1" },
+    );
+
+    expect(definition).toMatchObject({
+      id: "nested-model",
+      contextWindow: 131072,
+    });
+  });
+
+  it("falls back to 128000 when the endpoint advertises no context window", async () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const { mod } = await loadModule({ endpoints: [] });
+    const { buildModelDefinition } = mod.__test__;
+
+    const definition = await buildModelDefinition(
+      { id: "bare-model" },
+      { name: "demo", baseUrl: "https://example.com/v1" },
+    );
+
+    expect(definition).toMatchObject({
+      id: "bare-model",
+      contextWindow: 128000,
+    });
+  });
+
   it("filters embeddings and applies include/exclude glob patterns", async () => {
     vi.stubGlobal("fetch", vi.fn());
     const { mod } = await loadModule({ endpoints: [] });

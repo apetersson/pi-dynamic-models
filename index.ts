@@ -412,6 +412,9 @@ async function buildModelDefinition(
   const capabilities = isRecord(raw.capabilities)
     ? raw.capabilities
     : undefined;
+  const topProvider = isRecord(raw.top_provider)
+    ? raw.top_provider
+    : undefined;
   const contextWindow =
     override?.contextWindow ??
     pickNumber(
@@ -421,6 +424,8 @@ async function buildModelDefinition(
       raw.maxContextTokens,
       raw.max_model_len,              // vLLM / SGLang / TGI / LM Studio / oMLX
       raw.maxModelLen,                // camelCase variant
+      raw.context_length,             // top-level (ds4 / TGI / MLX gateways)
+      topProvider?.context_length,    // nested top_provider (some gateways)
       architecture?.context_length,
       architecture?.max_context_length,
       limits?.context_window,
@@ -438,6 +443,7 @@ async function buildModelDefinition(
       raw.max_tokens,
       raw.max_completion_tokens,
       raw.maxCompletionTokens,
+      topProvider?.max_completion_tokens, // nested top_provider (some gateways)
       limits?.max_tokens,
       limits?.max_output_tokens,
       metadata?.max_tokens,

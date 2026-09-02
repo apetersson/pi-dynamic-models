@@ -244,8 +244,8 @@ Many OpenAI-compatible `/v1/models` endpoints only return a model id and very li
 This extension tries to infer or normalize from several common field names, including:
 
 - model id/name
-- context window
-- max output tokens
+- context window (including top-level `context_length` and nested `top_provider.context_length`)
+- max output tokens (including nested `top_provider.max_completion_tokens`)
 - reasoning support
 - input modalities
 - cost/pricing
